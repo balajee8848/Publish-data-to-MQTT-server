@@ -1,4 +1,6 @@
 import time
+from datetime import datetime
+import random
 import paho.mqtt.client as mqtt
 
 #callback
@@ -12,11 +14,20 @@ client.on_connect = on_connect
 #Connecting to the broker
 client.connect("localhost",1883)
 
-#publishing data continuously
-num = 0
+#publishing time and temperature data continuously
 while True:
-    client.publish("Test/", str(num))
-    num+=1
+    #fetching the current time
+    currTime = datetime.now().strftime("%H:%M:%S")
+    
+    #updating temperature value as random numbers between 32 and 37
+    temp = str(random.randrange(32,37)) + " C"
+    
+    json = {"time":str(currTime), "temp":str(temp)}
+    
+    #publishing the data
+    client.publish("Test/", str(json))
+    
+    #waiting for a second
     time.sleep(1)
 
 #unreachale code
