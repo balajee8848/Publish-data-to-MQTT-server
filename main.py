@@ -34,7 +34,7 @@ def main():
     #publishing time and temperature data continuously
     while True:
         #fetching data from sensor
-        dataFromSensor = sensorData.fetch()
+        dataFromSensor = sensor_Data.fetch()
 
         #generating payload
         payload = convertToJson.get(dataFromSensor)

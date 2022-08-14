@@ -1,7 +1,7 @@
 from datetime import datetime
 import random
 
-class sensorData:
+class sensor_Data:
     @staticmethod
     def fetch():
         """ for now we are generating temperature data randomly """
