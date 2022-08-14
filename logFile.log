@@ -1,0 +1,33 @@
+2022-08-14 23:39:44,383 - INFO - Connected with broker through localhost in port 1883
+2022-08-14 23:39:44,404 - INFO - Pubished data - {
+    "time": "23:39:44",
+    "temperature": "39 C"
+}
+2022-08-14 23:39:45,404 - INFO - Pubished data - {
+    "time": "23:39:45",
+    "temperature": "37 C"
+}
+2022-08-14 23:39:46,406 - INFO - Pubished data - {
+    "time": "23:39:46",
+    "temperature": "37 C"
+}
+2022-08-14 23:39:47,407 - INFO - Pubished data - {
+    "time": "23:39:47",
+    "temperature": "38 C"
+}
+2022-08-14 23:39:48,409 - INFO - Pubished data - {
+    "time": "23:39:48",
+    "temperature": "34 C"
+}
+2022-08-14 23:39:49,410 - INFO - Pubished data - {
+    "time": "23:39:49",
+    "temperature": "34 C"
+}
+2022-08-14 23:39:50,411 - INFO - Pubished data - {
+    "time": "23:39:50",
+    "temperature": "33 C"
+}
+2022-08-14 23:39:51,412 - INFO - Pubished data - {
+    "time": "23:39:51",
+    "temperature": "34 C"
+}

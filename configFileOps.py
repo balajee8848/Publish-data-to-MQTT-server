@@ -27,4 +27,4 @@ class configFile:
             print("Config file not found")
             exit()
 
-        return;
+        return
