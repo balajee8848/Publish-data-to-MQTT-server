@@ -40,12 +40,13 @@ def main():
         payload = convertToJson.get(dataFromSensor)
 
         # publishing the data
-        try:
-            client.publish("Temperature Data/", payload)
-        except Exception as e:
-            logging.warning('Not able to publish data to broker')
-        else:
+        flag = client.publish("Temperature Data/", payload)
+
+        if flag[0] == 0:
             logging.info('Pubished data - ' + payload)
+        else:
+            logging.critical('Client Disconnected - Not able to publish data to broker')
+            exit()
         
         #waiting for a second
         time.sleep(1)
