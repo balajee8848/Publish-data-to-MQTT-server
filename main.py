@@ -1,6 +1,5 @@
 import time
 import paho.mqtt.client as mqtt
-import paho.mqtt.publish as publish
 
 #callback
 def on_connect(client, userdata, flags, rc):
@@ -13,8 +12,13 @@ client.on_connect = on_connect
 #Connecting to the broker
 client.connect("localhost",1883)
 
-#publishing a data for a single time
-publish.single("Test/", "Single message from python")
+#publishing data continuously
+num = 0
+while True:
+    client.publish("Test/", str(num))
+    num+=1
+    time.sleep(1)
 
-#dsconnecting
+#unreachale code
 client.disconnect()
+
