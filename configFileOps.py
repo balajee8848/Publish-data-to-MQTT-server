@@ -2,20 +2,16 @@ import configparser
 
 class configFile:
     @staticmethod
-    def getProp(section, option):
-        # creating object
-        configFile = configparser.ConfigParser()
-        configFile.read('config.ini')
-
+    def getProp(confFileObj, section, option):
         # check whether valid section and option values are given in confg file
-        if (configFile.has_section(section) == False):
+        if (confFileObj.has_section(section) == False):
             print("Section not found in config file - ", section)
             exit()
-        if (configFile.has_option(section, option) == False):
+        if (confFileObj.has_option(section, option) == False):
             print("Option not found in config file -  ", option)
             exit()
 
-        return (configFile[section][option])
+        return (confFileObj[section][option])
 
     @staticmethod
     def isPresent():
@@ -27,4 +23,4 @@ class configFile:
             print("Config file not found")
             exit()
 
-        return
+        return configFile

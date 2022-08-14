@@ -9,17 +9,18 @@ import logging
 
 def main():
     #Checking for config file
-    configFile.isPresent()
+    confFileObj = configFile.isPresent()
 
     # setup log
-    setupLog.basicConfiguration()
+    tempLevel = str(configFile.getProp(confFileObj, "logger", "level"))
+    setupLog.basicConfiguration(tempLevel)
 
     #Creating a instance
     client = mqtt.Client()
 
     #fetching broker and portID from config file
-    broker = str(configFile.getProp("broker", "link"))
-    portID = int(configFile.getProp("broker", "portID"))
+    broker = str(configFile.getProp(confFileObj, "broker", "link"))
+    portID = int(configFile.getProp(confFileObj, "broker", "portID"))
 
     #Connecting to the broker
     try:
