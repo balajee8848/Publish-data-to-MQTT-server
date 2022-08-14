@@ -9,7 +9,7 @@ class sensorData:
         time = datetime.now().strftime("%H:%M:%S")
 
         # updating temperature value as random numbers between 32 and 37
-        data = str(random.randrange(32, 37)) + " C"
+        data = str(random.randrange(30, 40)) + " C"
 
         temp = {}
         temp.update({'currTime':str(time)})

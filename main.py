@@ -5,21 +5,25 @@ from convertToJson import *
 import time
 import paho.mqtt.client as mqtt
 
-#callback
-def on_connect(client, userdata, flags, rc):
-    print("Connected with broker")
-
 def main():
+    #Checking for config file
+    configFile.isPresent()
+
     #Creating a instance
     client = mqtt.Client()
-    client.on_connect = on_connect
 
     #fetching broker and portID from config file
     broker = str(configFile.getProp("broker", "link"))
     portID = int(configFile.getProp("broker", "portID"))
 
     #Connecting to the broker
-    client.connect(broker, portID)
+    try:
+        client.connect(broker, portID)
+    except Exception as e:
+        print("Not able to connect to broker")
+        exit()
+
+    print("Connected with broker")
 
     #publishing time and temperature data continuously
     while True:
