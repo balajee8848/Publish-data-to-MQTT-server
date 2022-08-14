@@ -3,6 +3,7 @@ from configFileOps import *
 import time
 from datetime import datetime
 import random
+import json
 import paho.mqtt.client as mqtt
 
 #callback
@@ -15,8 +16,8 @@ def main():
     client.on_connect = on_connect
 
     #fetching broker and portID from config file
-    broker = str(configFile.getProp("broker", "link"))
-    portID = int(configFile.getProp("broker", "portID"))
+    broker = str(configFile.getProp("broker","link"))
+    portID = int(configFile.getProp("broker","portID"))
 
     #Connecting to the broker
     client.connect(broker,portID)
@@ -27,13 +28,17 @@ def main():
         currTime = datetime.now().strftime("%H:%M:%S")
     
         #updating temperature value as random numbers between 32 and 37
-        temp = str(random.randrange(32,37)) + " C"
-    
-        json = {"time":str(currTime), "temp":str(temp)}
+        temperature = str(random.randrange(32,37)) + " C"
+
+        #creating the payload
+        payload = '{"time":"' + str(currTime) + '", "temperature":"' + str(temperature) +'"}'
+        payload = json.loads(str(payload))
+        payload = json.dumps(payload, indent=4)
     
         #publishing the data
-        client.publish("Test/", str(json))
-    
+        client.publish("Test/", payload)
+        print(payload)
+        
         #waiting for a second
         time.sleep(1)
 
