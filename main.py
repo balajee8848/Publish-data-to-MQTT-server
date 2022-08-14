@@ -1,4 +1,5 @@
 from configFileOps import *
+from sensorData import *
 
 import time
 from datetime import datetime
@@ -24,14 +25,11 @@ def main():
 
     #publishing time and temperature data continuously
     while True:
-        #fetching the current time
-        currTime = datetime.now().strftime("%H:%M:%S")
-    
-        #updating temperature value as random numbers between 32 and 37
-        temperature = str(random.randrange(32,37)) + " C"
+        #fetching data from sensor
+        dataFromSensor = sensorData.fetch()
 
         #creating the payload
-        payload = '{"time":"' + str(currTime) + '", "temperature":"' + str(temperature) +'"}'
+        payload = '{"time":"' + dataFromSensor['currTime'] + '", "temperature":"' + dataFromSensor['temperature'] +'"}'
         payload = json.loads(str(payload))
         payload = json.dumps(payload, indent=4)
     
