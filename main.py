@@ -10,13 +10,15 @@ import paho.mqtt.client as mqtt
 import logging
 
 ####GLOBAL DECLARATIONS####
+disconnected = True
 #sleep time
-sleepTime = 5
+sleepTime = 1
 #min and max values
 min = 30
 max = 40
 
 #callback function
+
 def on_message(client, userdata, msg):
     global sleepTime
     global min
@@ -25,6 +27,7 @@ def on_message(client, userdata, msg):
     #converting string to dictionary
     temp = json.loads(recvdStr)
     #assigning values to global variables according to the values given
+    print(type(temp))
     if temp["type"] == "interval":
         sleepTime = temp["value"]
     elif temp["type"] == "config":
@@ -35,6 +38,7 @@ def main():
     global sleepTime
     global min
     global max
+    global disconnected
     #Checking for config file
     confFileObj = configFile.isPresent()
 
@@ -45,6 +49,7 @@ def main():
     #Creating a instance
     client = mqtt.Client()
     client.on_message = on_message
+    client.on_disconnect = on_disconnect
 
     #fetching broker and portID from config file
     broker = str(configFile.getProp(confFileObj, "broker", "link"))
@@ -58,6 +63,7 @@ def main():
         exit()
 
     logging.info('Connected with broker through ' + str(broker) + ' in port ' + str(portID))
+    disconnected = False
 
     #subscribing to a particular topic
     client.subscribe('/config/config')
@@ -79,14 +85,15 @@ def main():
         else:
             logging.critical('Client Disconnected - Not able to publish data to broker')
             logging.critical('Trying to reconnect...')
-            connectionMadeFlag = 1
-            while connectionMadeFlag != 0:
+            disconnected = True
+            while disconnected != False:
                 try:
-                    connectionMadeFlag = client.connect(broker,portID)
-                    if connectionMadeFlag == 0:
+                    disconnected = client.connect(broker, portID)
+                    if disconnected == False:
                         logging.info('Reconnected with broker through ' + str(broker) + ' in port ' + str(portID))
                 except Exception as err:
                     pass
+
         
         #waiting for a second
         time.sleep(sleepTime-1)
