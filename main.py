@@ -7,6 +7,12 @@ import time
 import paho.mqtt.client as mqtt
 import logging
 
+#callback function
+def on_message(client, userdata, msg):
+    print(msg.payload.decode())
+
+
+
 def main():
     #Checking for config file
     confFileObj = configFile.isPresent()
@@ -17,6 +23,7 @@ def main():
 
     #Creating a instance
     client = mqtt.Client()
+    client.on_message = on_message
 
     #fetching broker and portID from config file
     broker = str(configFile.getProp(confFileObj, "broker", "link"))
@@ -31,8 +38,12 @@ def main():
 
     logging.info('Connected with broker through ' + str(broker) + ' in port ' + str(portID))
 
+    #subscribing to a particular topic
+    client.subscribe('/config/config')
+
     #publishing time and temperature data continuously
     while True:
+        client.loop_start()
         #fetching data from sensor
         dataFromSensor = sensor_Data.fetch()
 
@@ -58,7 +69,7 @@ def main():
         
         #waiting for a second
         time.sleep(1)
-
+        client.loop()
     #unreachale code
     client.disconnect()
 
