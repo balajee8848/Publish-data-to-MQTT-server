@@ -1,3 +1,5 @@
+import json
+
 from configFileOps import *
 from sensorData import *
 from convertToJson import *
@@ -7,13 +9,18 @@ import time
 import paho.mqtt.client as mqtt
 import logging
 
+#sleep time
+sleepTime = 10
 #callback function
 def on_message(client, userdata, msg):
-    print(msg.payload.decode())
-
-
+    global sleepTime
+    recvdStr = msg.payload.decode()
+    temp = json.loads(recvdStr)
+    if temp["type"] == "interval":
+        sleepTime = temp["value"]
 
 def main():
+    global sleepTime
     #Checking for config file
     confFileObj = configFile.isPresent()
 
@@ -68,8 +75,9 @@ def main():
                     pass
         
         #waiting for a second
-        time.sleep(1)
+        time.sleep(sleepTime-1)
         client.loop()
+        
     #unreachale code
     client.disconnect()
 
