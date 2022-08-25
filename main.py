@@ -9,18 +9,32 @@ import time
 import paho.mqtt.client as mqtt
 import logging
 
+####GLOBAL DECLARATIONS####
 #sleep time
-sleepTime = 10
+sleepTime = 5
+#min and max values
+min = 30
+max = 40
+
 #callback function
 def on_message(client, userdata, msg):
     global sleepTime
+    global min
+    global max
     recvdStr = msg.payload.decode()
+    #converting string to dictionary
     temp = json.loads(recvdStr)
+    #assigning values to global variables according to the values given
     if temp["type"] == "interval":
         sleepTime = temp["value"]
+    elif temp["type"] == "config":
+        min = temp["random_min"]
+        max = temp["random_max"]
 
 def main():
     global sleepTime
+    global min
+    global max
     #Checking for config file
     confFileObj = configFile.isPresent()
 
@@ -52,7 +66,7 @@ def main():
     while True:
         client.loop_start()
         #fetching data from sensor
-        dataFromSensor = sensor_Data.fetch()
+        dataFromSensor = sensor_Data.fetch(min,max)
 
         #generating payload
         payload = convertToJson.get(dataFromSensor)
@@ -77,7 +91,7 @@ def main():
         #waiting for a second
         time.sleep(sleepTime-1)
         client.loop()
-        
+
     #unreachale code
     client.disconnect()
 
