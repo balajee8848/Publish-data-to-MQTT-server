@@ -46,7 +46,15 @@ def main():
             logging.info('Pubished data - ' + payload)
         else:
             logging.critical('Client Disconnected - Not able to publish data to broker')
-            exit()
+            logging.critical('Trying to reconnect...')
+            connectionMadeFlag = 1
+            while connectionMadeFlag != 0:
+                try:
+                    connectionMadeFlag = client.connect(broker,portID)
+                    if connectionMadeFlag == 0:
+                        logging.info('Reconnected with broker through ' + str(broker) + ' in port ' + str(portID))
+                except Exception as err:
+                    pass
         
         #waiting for a second
         time.sleep(1)
